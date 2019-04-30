@@ -7,11 +7,11 @@ import auth0 from '../services/auth0';
 
 
 class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
+  static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
     const isAuthenticated = process.browser ? auth0.clientAuth() : auth0.serverAuth(ctx.req);
     
-    // console.log(isAuthenticated);
+    console.log(isAuthenticated);
     
     // const isAuthenticated = process.browser ? "clientAuth()" : "serverAuth()";
     // let isAuthenticated;
@@ -26,7 +26,7 @@ class MyApp extends App {
     }
     const auth = { isAuthenticated };
 
-    return { pageProps,auth }
+    return { pageProps, auth }
   }
 
   render() {
@@ -34,7 +34,7 @@ class MyApp extends App {
 
     return (
       <Container>
-        <Component {...pageProps} auth={auth} />
+        <Component {...pageProps} auth ={auth} />
       </Container>
     )
   }

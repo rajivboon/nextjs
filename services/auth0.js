@@ -50,15 +50,15 @@ class Auth0 {
         }
 
         logout () {
-          Cookies.remove('user');         
+          // Cookies.remove('user');         
           Cookies.remove('jwt'); 
-          Cookies.remove('expiresAt');
+          // Cookies.remove('expiresAt');
           // this.accessToken = null;
     // this.idToken = null;
     // this.expiresAt = 0;
 
-          this.auth0.authorize({
-            returnTo: '',
+          this.auth0.logout({
+            returnTo: 'http://localhost:3000',
             clientID: 'N904Pe1iE083z0rAc2kfJYu3qoylL597'
           })
         }
@@ -82,22 +82,25 @@ class Auth0 {
 
   serverAuth(req){
   if (req.headers.cookie) {
-    // const expirestAtCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('expiresAt='));
     
+    const expirestAtCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('expiresAt='));
+        
+    if (!expirestAtCookie) { return undefined};
     
-    // if (!expirestAtCookie) { return undefined};
-    // const expiresAt = expirestAtCookie.split('=')[1];
+    const expiresAt = expirestAtCookie.split('=')[1];
+    console.log(expiresAt);
    
-    const cookies = req.headers.cookie;
-    console.log(cookies);
-    const splitedCookies = cookies.split(';');
-    console.log(splitedCookies);
-    const expirestAtCookie = splitedCookies.find(c => c.trim().startsWith('expiresAt='));
-    console.log(expirestAtCookie);
-    const expiresAtArray = expirestAtCookie.split('=');
-    console.log(expiresAtArray);
-    const expiresAt = expiresAtArray[1];
-    console.log(expiresAt)
+    // const cookies = req.headers.cookie;
+    // console.log(cookies);
+    // const splitedCookies = cookies.split(';');
+    // console.log(splitedCookies);
+    // const expiresAtCookie = splitedCookies.find(c => c.trim().startsWith('expiresAt='));
+    // console.log(expiresAtCookie);
+    // if (!expirestAtCookie) { return undefined};
+    // const expiresAtArray = expirestACookie.split('=');
+    // console.log(expiresAtArray);
+    // const expiresAt = expiresAtArray[1];
+    // console.log(expiresAt);
 
     return new Date().getTime() < expiresAt;
   }    
