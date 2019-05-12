@@ -2,11 +2,11 @@ import React from 'react';
 import Header from '../shared/Header';
 
 const BaseLayout = (props) => {
-    const {classNames, children, isAuthenticated}=props;
+    const {classNames, children, isAuthenticated, user}=props;
     
     return (
         <React.Fragment >
-        <Header isAuthenticated={isAuthenticated} />
+        <Header isAuthenticated={isAuthenticated} user={user} />
         {props.children}
 
         

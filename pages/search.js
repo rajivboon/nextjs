@@ -7,11 +7,13 @@ class Search extends React.Component {
     render() {
         return(
             <Baselayout {...this.props.auth}>
-            <BasePage>
-            <h1>I am Search</h1>
+                <BasePage title="I am Search">
+            
             </BasePage>
             </Baselayout>
         )
     }
 }
 export default Search;
+
+    

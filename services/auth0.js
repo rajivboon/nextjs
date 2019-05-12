@@ -1,32 +1,33 @@
 import auth0 from 'auth0-js';
 import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken';
 
 class Auth0 {
         constructor() {
 
             this.auth0 = new auth0.WebAuth({
-            domain: 'echocorp.auth0.com',
-            clientID: 'N904Pe1iE083z0rAc2kfJYu3qoylL597',
+            domain: 'quickmarriages.auth0.com',
+            clientID: '0ijPBeMRqJHNBxvQoQ9BeI7tde5qLqnQ',
             redirectUri: 'http://localhost:3000/callback',
             responseType: 'token id_token',
-            scope: 'openid'
+            scope: 'openid profile'
           });
           this.login =this.login.bind(this);
           this.logout = this.logout.bind(this);
           this.handleAuthentication = this.handleAuthentication.bind(this);
-          this.isAuthenticated = this.isAuthenticated.bind(this);
+          // this.isAuthenticated = this.isAuthenticated.bind(this);
         }
         handleAuthentication() {
-         
           return new Promise((resolve, reject) => {
-
+            // debugger;
+            
             this.auth0.parseHash((err, authResult) => {
               if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
                 resolve();
               } else if (err) {
                 reject(err);
-                console.log(err);
+                console.log((undefined, "setsession handleauthentitation"));
                
               }
             });
@@ -50,16 +51,16 @@ class Auth0 {
         }
 
         logout () {
-          // Cookies.remove('user');         
+          Cookies.remove('user');         
           Cookies.remove('jwt'); 
-          // Cookies.remove('expiresAt');
+          Cookies.remove('expiresAt');
           // this.accessToken = null;
     // this.idToken = null;
     // this.expiresAt = 0;
 
           this.auth0.logout({
             returnTo: 'http://localhost:3000',
-            clientID: 'N904Pe1iE083z0rAc2kfJYu3qoylL597'
+            clientID: '0ijPBeMRqJHNBxvQoQ9BeI7tde5qLqnQ'
           })
         }
       
@@ -68,42 +69,60 @@ class Auth0 {
     this.auth0.authorize();
   }
 
-  isAuthenticated() {
-  // Check whether the current time is past the
-  // access token's expiry time
-  const expiresAt = Cookies.getJSON('expiresAt');
-  console.log (new Date().getTime() < expiresAt);
-  return new Date().getTime() < expiresAt;
+  // isAuthenticated() {
+  // // Check whether the current time is past the
+  // // access token's expiry time
+  //   const expiresAt = Cookies.getJSON('expiresAt');
+  //   debugger;
+  // // console.log (new Date().getTime() < expiresAt);
+  // return new Date().getTime() < expiresAt;
+  // }
+
+  verifyToken(token) {
+    if (token) { 
+
+      const decodedToken = jwt.decode(token);
+      const expiresAt = decodedToken.exp * 1000;
+
+      return (decodedToken && new Date().getTime() < expiresAt) ? decodedToken : undefined;
+    }
+    return undefined;
   }
 
   clientAuth() {
-    return this.isAuthenticated();
+    const token = Cookies.getJSON('jwt');
+    const verifiedToken = this.verifyToken(token);
+
+    return token;
   }
 
   serverAuth(req){
   if (req.headers.cookie) {
     
-    const expirestAtCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('expiresAt='));
+    const tokenCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='));
         
-    if (!expirestAtCookie) { return undefined};
+    if (!tokenCookie) { return console.log(undefined,"servercookie")};
     
-    const expiresAt = expirestAtCookie.split('=')[1];
-    console.log(expiresAt);
-   
+    const token = tokenCookie.split('=')[1];
+    const verifiedToken = this.verifyToken(token);
+    return verifiedToken;
+
+    // console.log(undefined);   
     // const cookies = req.headers.cookie;
     // console.log(cookies);
     // const splitedCookies = cookies.split(';');
     // console.log(splitedCookies);
     // const expiresAtCookie = splitedCookies.find(c => c.trim().startsWith('expiresAt='));
     // console.log(expiresAtCookie);
-    // if (!expirestAtCookie) { return undefined};
-    // const expiresAtArray = expirestACookie.split('=');
+    // if (!expiresAtCookie) { return undefined};
+    // const expiresAtArray = expiresAtCookie.split('=');
     // console.log(expiresAtArray);
     // const expiresAt = expiresAtArray[1];
     // console.log(expiresAt);
+    // return new Date().getTime() < expiresAt;
 
-    return new Date().getTime() < expiresAt;
-  }    
+    }    
+    return undefined;
   }
 
 }

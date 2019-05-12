@@ -1,5 +1,6 @@
 import React from 'react';
 import Links from 'next/link';
+import auth0 from '../../services/auth0';   
 import {
     Collapse,
     Navbar,
@@ -10,11 +11,10 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem } from 'reactstrap';
- import auth0 from '../../services/auth0'   
 
   
     const BsNavLink = (props) => {
-        const {route, title} = props;
+        const {route, title,} = props;
         return (
             <Links href={route}>
             <a className= "port-navbar-link"> {title} </a>
@@ -49,7 +49,9 @@ import {
       });
     }
     render() {
-        const {isAuthenticated}=this.props;
+        const {isAuthenticated, user}=this.props;
+      console.log(user , "header");
+
       return (
         <div>
           <Navbar className= " port-nav port-default" color="danger" text="white" light expand="md">
@@ -65,7 +67,11 @@ import {
                  } 
                  { isAuthenticated &&
                      <Logout />
-                 }
+                }
+                {isAuthenticated &&
+                  <span className="nav-link"> {user.name}</span>
+                } 
+              {/* <Login /> */}
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret>
                     Options

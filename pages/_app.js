@@ -1,17 +1,17 @@
 import React from 'react';
 import App, { Container } from 'next/app';
+import auth0 from '../services/auth0';
 //stylings
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/main.scss';
-import auth0 from '../services/auth0';
 
 
 class MyApp extends App {
-  static async getInitialProps({ Component, router, ctx }) {
+  static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
-    const isAuthenticated = process.browser ? auth0.clientAuth() : auth0.serverAuth(ctx.req);
+    const user = process.browser ? auth0.clientAuth() : auth0.serverAuth(ctx.req);
     
-    console.log(isAuthenticated);
+    // console.log(isAuthenticated);
     
     // const isAuthenticated = process.browser ? "clientAuth()" : "serverAuth()";
     // let isAuthenticated;
@@ -24,13 +24,13 @@ class MyApp extends App {
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
-    const auth = { isAuthenticated };
+    const auth = { user, isAuthenticated: !!user };
 
     return { pageProps, auth }
   }
 
   render() {
-    const { Component, pageProps, auth } = this.props
+    const { Component, pageProps, auth } = this.props;
 
     return (
       <Container>
