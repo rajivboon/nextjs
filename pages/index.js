@@ -1,21 +1,58 @@
 import React from 'react';
-import { Button } from 'reactstrap';
-import Baselayout from '../components/layouts/Baselayout'
-
+import BaseLayout from '../components/layouts/BaseLayout';
+import { Container, Row, Col } from 'reactstrap';
 
 class Index extends React.Component {
+   
     render() {
+        const { isAuthenticated, user } = this.props.auth;
+        
+    return (         
+        <BaseLayout className="cover" {...this.props.auth} headerType="index">
+                <div className="main-section">
+                    <div className="background-image">
+                        <img src="../static/images/background-index.png" />
+                    </div>
 
-        const {isAuthenticated, user } = this.props.auth;
-        return(
-            <Baselayout {...this.props.auth}>
-             <h1> {isAuthenticated && <span>{user.name}</span> }</h1>
-             <h1> welcome site i lcccove you 
-                 </h1>
-                 <Button color="danger">clivk me</Button>
-            </Baselayout>
-            
-        );
+                    <Container>
+                        <Row>
+                            <Col md="6">
+                                <div className="hero-section">
+                                    <div className={`flipper`}>
+                                        <div className="back">
+                                            <div className="hero-section-content">
+                                            <h2> Millions of verified Members </h2>
+                                                <div className="hero-section-content-intro">
+                                                    Have a look at my portfolio and job history.
+                  </div>
+                                            </div>
+                                            <img className="image" src="/static/images/063.jpg" />
+                                            <div className="shadow-custom">
+                                                <div className="shadow-inner"> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col md="6" className="hero-welcome-wrapper">
+                                <div className="hero-welcome-text">
+                                    <h1>
+                                        {isAuthenticated && <span>{user.name}</span>} Welcome to the Marriage bureau website of Shekar.
+                                        Get informed, collaborate and discover matches I was working on through the years!
+            </h1>
+                                </div>
+                                <div className="hero-welcome-bio">
+                                    <h1>
+                                        Let's take a look on some Profiles.
+            </h1>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            </BaseLayout>        
+
+        )
     }
 }
 

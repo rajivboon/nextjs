@@ -1,99 +1,122 @@
 import React from 'react';
-import Links from 'next/link';
-import auth0 from '../../services/auth0';   
+import Link from 'next/link';
+import auth0 from '../../services/auth0';
 import {
     Collapse,
     Navbar,
     NavbarToggler,
     NavbarBrand,
     Nav,
+    NavItem,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem } from 'reactstrap';
+    DropdownItem 
+    
+} from 'reactstrap';
 
-  
-    const BsNavLink = (props) => {
-        const {route, title,} = props;
-        return (
-            <Links href={route}>
-            <a className= "port-navbar-link"> {title} </a>
-                </Links>
-        )
-    }
+const Login = () => {
+    return (
+        <span onClick={auth0.login} className="nav-link port-navbar-link clickable"> login </span>
+    )
+}
 
-    const Login = () => {
-        return(
-            <a onClick={auth0.login} className="port-navbar-link clickable">Login</a> 
-        )
-    }
+const Logout = () => {
+    return (
+        <span onClick={auth0.logout} className="nav-link port-navbar-link clickable"> logout </span>
+    )
+}
 
-    const Logout = () => {
-        return(
-            <a onClick={auth0.logout} className="port-navbar-link clickable ">Logout</a> 
-        )
-    }
+const BsnavLinks = (props) => {
+   const { route, title } = props;
+   return (
+       <Link href={route}>
+           <a className="nav-link port-navbar-likn ">{title} </a>
+       </Link>
+   )
+}
 
-  export default class Example extends React.Component {
+export default class Header extends React.Component {
+
+
     constructor(props) {
-      super(props);
-  
-      this.toggle = this.toggle.bind(this);
-      this.state = {
-        isOpen: false
-      };
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false
+        };
     }
     toggle() {
-      this.setState({
-        isOpen: !this.state.isOpen
-      });
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
     }
     render() {
-        const {isAuthenticated, user}=this.props;
-      console.log(user , "header");
+        const { isAuthenticated, user, className } = this.props;
+        
+        return (
+            <div>
+                <Navbar className={`port-navbar port-nav-base absolute ${className}`}  color="transparent" dark expand="md">
+                    <NavbarBrand className="port-navbar-brand " href="/">Quick marriage</NavbarBrand>
+                    <NavbarToggler onClick={this.toggle} />
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav className="ml-auto" navbar>
+                            
+                            {/* <Link href="/about">
+                                <a className="nav-link">About</a>
+                            </Link> */}
+                            <NavItem className="port-navbar-item">
+                            <BsnavLinks route="/" title="Home" />
+                            </NavItem>
+                            <NavItem className="port-navbar-item">
+                                <BsnavLinks route="/about" title="About" />
+                            </NavItem>
+                            <NavItem className="port-navbar-item">
+                                {/* <BsnavLinks route="/blogs" title="Matches" /> */}
+                                <UncontrolledDropdown nav inNavbar>
+                                    <DropdownToggle nav caret>
+                                        Matches
+                </DropdownToggle>
+                                    <DropdownMenu right>
+                                        <DropdownItem>
+                                            Who Viewed My Profile
+                  </DropdownItem>
+                                        <DropdownItem>
+                                            New Matches
+                  </DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem>
+                                            Premium Members
+                  </DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                            </NavItem>
+                            <NavItem className="port-navbar-item">
+                                <BsnavLinks route="/portfolios" title="Search" />
+                            </NavItem>
 
-      return (
-        <div>
-          <Navbar className= " port-nav port-default" color="danger" text="white" light expand="md">
-            <NavbarBrand className= "port-navbar-brand" href="/">Quick Marriage</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav className="ml-auto" navbar>
-                <BsNavLink route='/' title="Home" /> 
-                <BsNavLink route='/about' title="About" />
-                <BsNavLink route='/search' title="Search" />
-                 { !isAuthenticated &&
-                     <Login />
-                 } 
-                 { isAuthenticated &&
-                     <Logout />
-                }
-                {isAuthenticated &&
-                  <span className="nav-link"> {user.name}</span>
-                } 
-              {/* <Login /> */}
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav caret>
-                    Options
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem>
-                      Option 1
-                    </DropdownItem>
-                    <DropdownItem>
-                      Option 2
-                    </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>
-                      Reset
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Nav>
-            </Collapse>
-          </Navbar>
-        </div>
-      );
+                            <NavItem className="port-navbar-item">
+                                <BsnavLinks route="/cv" title="Contact" />
+                            </NavItem>
+
+                            { !isAuthenticated &&
+                                <NavItem className="port-navbar-item">
+                                <Login />
+                            </NavItem>}
+
+                            {isAuthenticated &&
+                                <NavItem className="port-navbar-item">
+                                <Logout />
+                                </NavItem>}
+                            {isAuthenticated &&
+                                <NavItem className="port-navbar-item">
+                                    <span> {user.name} </span>
+                                </NavItem>}
+                        </Nav>
+                    </Collapse>
+                </Navbar>
+            </div>
+        );
     }
-  }
-// export default Header;
+}

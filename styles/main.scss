@@ -1,14 +1,53 @@
 @import '../styles/shared/fonts';
-@import './header.scss';
+
+// colors
+@import '../styles/shared/colors';
+
+
+// pages
+@import '../styles/shared/index';
+@import '../styles/shared/portfolios';
+
+// components
+@import '../styles/shared/header';
+
+
+
 
 html, body {
-    font-family: 'Quicksand'
+  height:100%;
+  width:100%;
+  font-family : 'Stylish-Regular';
 }
 
-.clickable {
+.absolute {
+  position: absolute;
+}
+
+.error {
+  font-weight: 700;
+  color: red;
+}
+
+.clickable{
+
     cursor: pointer;
 }
 
+
+
 .base-page {
-    padding-top: 10px;
+  padding: 150px 0 100px 0;
+  color: black;
+  background-color: #ecedee;
+  min-height: 100vh;
+
+  .page-header {
+    .page-header-title {
+      font-weight: 700;
+      color: black;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+  }
 }

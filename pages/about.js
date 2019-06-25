@@ -1,15 +1,18 @@
 import React from 'react';
-import Baselayout from '../components/layouts/Baselayout'
-import BasePage from '../components/BasePage'
+import BaseLayout from '../components/layouts/BaseLayout';
+import BasePage from '../components/Basepage';
+
 
 class About extends React.Component {
     render() {
-        return(
-            <Baselayout {...this.props.auth}>
-                <BasePage title="I am about" > </BasePage>
+        return (
+            <BaseLayout {...this.props.auth}>
+                <BasePage title="This is About page " className="" >                
+                </BasePage>            
+            </BaseLayout>
             
-            </Baselayout>
         )
     }
 }
+
 export default About;
